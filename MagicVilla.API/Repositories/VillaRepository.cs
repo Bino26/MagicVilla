@@ -1,5 +1,6 @@
 ﻿using MagicVilla.API.Data;
 using MagicVilla.API.Models.Domains;
+using MagicVilla.API.Models.DTOs;
 using MagicVilla.API.Repositories.IRepository;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -54,9 +55,24 @@ namespace MagicVilla.API.Repositories
             
         }
 
-        public Task<Villa> UpdateVillaAsync(Guid id, Villa villa)
+        public async Task<Villa> UpdateVillaAsync(Guid id, Villa villa)
         {
-            throw new NotImplementedException();
+            var existingVilla = await villaDbContext.Villas.FirstOrDefaultAsync(x => x.Id == id);
+            if(villa is null)
+            {
+                return null;
+            }
+            existingVilla.Name = villa.Name;
+            existingVilla.Details = villa.Details;
+            existingVilla.Rate = villa.Rate;
+            existingVilla.ImageUrl = villa.ImageUrl;
+            existingVilla.Amenity = villa.Amenity;
+            existingVilla.Sqft = villa.Sqft;
+
+            await villaDbContext.SaveChangesAsync();
+
+            return existingVilla;
+
         }
     }
 }

@@ -53,6 +53,17 @@ namespace MagicVilla.API.Controllers
             await villaRepository.CreateVillaAsync(villa);
             return Ok(mapper.Map<VillaDto>(villa));
         }
+        [HttpPut]
+        [Route("{id}")]
+        [ValidateModel]
+        
+
+        public async Task<IActionResult> UpdateVilla([FromRoute ]Guid id , [FromBody]UpdateVillaDto updateVillaDto)
+        {
+            var villa = mapper.Map<Villa>(updateVillaDto);
+            await villaRepository.UpdateVillaAsync(id, villa);
+            return Ok(villa);
+        }
 
         [HttpDelete]
         [Route("{id}")]
@@ -64,7 +75,7 @@ namespace MagicVilla.API.Controllers
             {
                 return NotFound("Villa not found");
             }
-            return Ok("User Deleted Successfuly");
+            return Ok("Villa Deleted Successfuly");
         }
 
         [HttpDelete]
