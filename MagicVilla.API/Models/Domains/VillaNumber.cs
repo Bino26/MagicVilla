@@ -7,7 +7,7 @@ namespace MagicVilla.API.Models.Domains
     {
         
         public int VillaNo { get; set; }
-        public Guid VillaID { get; set; }
+        public int VillaID { get; set; }
 
         public Villa Villa { get; set; }
 

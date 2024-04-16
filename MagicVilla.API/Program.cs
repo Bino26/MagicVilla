@@ -17,6 +17,7 @@ builder.Services.AddDbContext<VillaDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("MagicVillaString")));
 
 builder.Services.AddScoped<IVillaRepository,VillaRepository>();
+builder.Services.AddScoped<IVillaNumberRepository , VillaNumberRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 

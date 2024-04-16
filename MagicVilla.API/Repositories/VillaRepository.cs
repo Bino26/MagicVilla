@@ -68,6 +68,7 @@ namespace MagicVilla.API.Repositories
             existingVilla.ImageUrl = villa.ImageUrl;
             existingVilla.Amenity = villa.Amenity;
             existingVilla.Sqft = villa.Sqft;
+            existingVilla.UpdatedDate = DateTime.UtcNow;
 
             await villaDbContext.SaveChangesAsync();
 

@@ -23,8 +23,9 @@ namespace MagicVilla.API.Controllers
 
 
         [HttpGet]
+        [Route("AllVilla")]
 
-        public async Task<IActionResult> GetVilla()
+        public async Task<IActionResult> GetAllVilla()
         {
             var villas = await villaRepository.GetAllAsync();
             return Ok(mapper.Map<List<VillaDto>>(villas));
@@ -61,8 +62,8 @@ namespace MagicVilla.API.Controllers
         public async Task<IActionResult> UpdateVilla([FromRoute ]Guid id , [FromBody]UpdateVillaDto updateVillaDto)
         {
             var villa = mapper.Map<Villa>(updateVillaDto);
-            await villaRepository.UpdateVillaAsync(id, villa);
-            return Ok(villa);
+            var result =await villaRepository.UpdateVillaAsync(id, villa);
+            return Ok(result);
         }
 
         [HttpDelete]
