@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MagicVilla.API.CustomActionFilters;
 using MagicVilla.API.Models.Domains;
 using MagicVilla.API.Models.DTOs;
 using MagicVilla.API.Repositories.IRepository;
@@ -22,26 +23,39 @@ namespace MagicVilla.API.Controllers
 
         [HttpPost]
         [Route("AddVillaNumber")]
+        [ValidateModel]
 
-        public async Task<IActionResult> AddVillaNumber(AddVillaNumberDto addVillaNumberDto)
+        public async Task<IActionResult> AddVillaNumber([FromBody]AddVillaNumberDto addVillaNumberDto)
         {
             var villa = mapper.Map<VillaNumber>(addVillaNumberDto);
-            var result = await villaNumberRepository.AddNumberAsync(villa);
+            var result = await villaNumberRepository.AddDetailsAsync(villa);
             return Ok(mapper.Map<VillaNumberDto>(result));
+
         }
         [HttpGet]
-
-        public async Task<IActionResult> GetVillaNumber()
+        public async Task<IActionResult> GetAllVillaDetails()
         {
-            var villa = villaNumberRepository.GetAllNumbersAsync();
+            var villa =await  villaNumberRepository.GetAllDetailsAsync();
             return Ok(mapper.Map<List<VillaNumberDto>>(villa));
         }
         [HttpGet]
+        [Route("{no}")]
 
-        public async Task<IActionResult> GetVillaNumberById(int id)
+        public async Task<IActionResult> GetVillaDetailsByNo([FromRoute]int no)
         {
-            var villa = await villaNumberRepository.GetVillaNumberByIdAsync(id);
+            var villa = await villaNumberRepository.GetVillaDetailsByNoAsync(no);
             return Ok(mapper.Map<VillaNumberDto>(villa));
+        }
+        [HttpPut]
+        [Route("{no}")]
+        [ValidateModel]
+
+        public async Task<IActionResult> UpdateVillaDetails([FromRoute]int no, [FromBody]UpdateVillaNumberDto updateVillaNumberDto)
+        {
+            var villaDetails = mapper.Map<VillaNumber>(updateVillaNumberDto);
+            var result = await villaNumberRepository.UpdateDetailsAsync(no, villaDetails); ;
+            return Ok(result);
+
         }
     }
 }

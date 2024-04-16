@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicVilla.API.Migrations
 {
     [DbContext(typeof(VillaDbContext))]
-    [Migration("20240415174950_Add VillaNumber")]
-    partial class AddVillaNumber
+    [Migration("20240416171130_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,9 +69,9 @@ namespace MagicVilla.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3478aa88-f352-4e21-84cf-e3089bbb78bd"),
+                            Id = new Guid("5ca0cef8-67f8-41f0-971e-da1b641a43da"),
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 4, 15, 17, 49, 49, 399, DateTimeKind.Local).AddTicks(5806),
+                            CreatedDate = new DateTime(2024, 4, 16, 17, 11, 29, 617, DateTimeKind.Local).AddTicks(3244),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa3.jpg",
                             Name = "Royal Villa",
@@ -82,9 +82,9 @@ namespace MagicVilla.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("40416397-c89b-46b9-bc47-dcc56dddc203"),
+                            Id = new Guid("415d12f6-7dcf-47c5-95f3-1717bbba3124"),
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 4, 15, 17, 49, 49, 399, DateTimeKind.Local).AddTicks(5837),
+                            CreatedDate = new DateTime(2024, 4, 16, 17, 11, 29, 617, DateTimeKind.Local).AddTicks(3280),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa1.jpg",
                             Name = "Premium Pool Villa",
@@ -95,9 +95,9 @@ namespace MagicVilla.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ec77d02a-2ef0-4d58-91d8-7014561e7d98"),
+                            Id = new Guid("099f3828-ac13-461d-a7d8-74ac0d835ea1"),
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 4, 15, 17, 49, 49, 399, DateTimeKind.Local).AddTicks(5862),
+                            CreatedDate = new DateTime(2024, 4, 16, 17, 11, 29, 617, DateTimeKind.Local).AddTicks(3286),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa4.jpg",
                             Name = "Luxury Pool Villa",
@@ -108,9 +108,9 @@ namespace MagicVilla.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("081aedcc-dd6b-4514-8bcc-7af4a512bd4c"),
+                            Id = new Guid("92748d95-0f3b-4c83-9fb3-3f40453da60c"),
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 4, 15, 17, 49, 49, 399, DateTimeKind.Local).AddTicks(5866),
+                            CreatedDate = new DateTime(2024, 4, 16, 17, 11, 29, 617, DateTimeKind.Local).AddTicks(3290),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa5.jpg",
                             Name = "Diamond Villa",
@@ -121,9 +121,9 @@ namespace MagicVilla.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("914418f9-a4f0-4911-8c9c-8bd72fb5bd83"),
+                            Id = new Guid("40ae7b08-50a6-4a4a-945e-a1802fbb0d01"),
                             Amenity = "",
-                            CreatedDate = new DateTime(2024, 4, 15, 17, 49, 49, 399, DateTimeKind.Local).AddTicks(5869),
+                            CreatedDate = new DateTime(2024, 4, 16, 17, 11, 29, 617, DateTimeKind.Local).AddTicks(3316),
                             Details = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
                             ImageUrl = "https://dotnetmastery.com/bluevillaimages/villa2.jpg",
                             Name = "Diamond Pool Villa",
@@ -136,25 +136,21 @@ namespace MagicVilla.API.Migrations
 
             modelBuilder.Entity("MagicVilla.API.Models.Domains.VillaNumber", b =>
                 {
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("VillaNo")
+                        .HasColumnType("int");
 
                     b.Property<string>("SpecialDetails")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("VillaID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("VillaNo")
-                        .HasColumnType("int");
+                    b.HasKey("VillaNo");
 
                     b.HasIndex("VillaID");
 
-                    b.ToTable("Regions");
+                    b.ToTable("VillaNumbers");
                 });
 
             modelBuilder.Entity("MagicVilla.API.Models.Domains.VillaNumber", b =>

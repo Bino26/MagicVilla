@@ -15,35 +15,41 @@ namespace MagicVilla.API.Repositories
             this.villaDbContext = villaDbContext;
         }
 
-        public async Task<VillaNumber> AddNumberAsync(VillaNumber number)
+        public async Task<VillaNumber> AddDetailsAsync(VillaNumber villaNumber)
         {
-            var villaNumber= await villaDbContext.VillaNumbers.AddAsync(number);
+            var villa= await villaDbContext.VillaNumbers.AddAsync(villaNumber);
             await villaDbContext.SaveChangesAsync();
-            return number;
+            return villaNumber;
         }
 
-        public async Task<List<VillaNumber>> GetAllNumbersAsync()
+        public async Task<List<VillaNumber>> GetAllDetailsAsync()
         {
             var villas = await villaDbContext.VillaNumbers.Include("Villa").ToListAsync();
             return villas;
                 
         }
 
-        public async Task<VillaNumber> GetVillaNumberByIdAsync(int numberId)
+        public async Task<VillaNumber> GetVillaDetailsByNoAsync(int No)
         {
-            var villa = await villaDbContext.VillaNumbers.Include("Villa").FirstOrDefaultAsync(x => x.VillaNo==numberId);
+            var villa = await villaDbContext.VillaNumbers.Include("Villa").FirstOrDefaultAsync(x => x.VillaNo==No);
+            if(villa is null){
+                return null;
+            }
             return villa;
         }
 
-        public async Task<VillaNumber> UpdateNumberAsync(int numberId, VillaNumber number)
+        public async Task<VillaNumber> UpdateDetailsAsync(int No, VillaNumber villaNumber)
         {
-            var existingVilla = await villaDbContext.VillaNumbers.FirstOrDefaultAsync(x => x.VillaNo == numberId);
-            if(number is null)
+            var existingVilla = await villaDbContext.VillaNumbers.Include("Villa").FirstOrDefaultAsync(x => x.VillaNo == No);
+            if(villaNumber is null)
             {
                 return null;
             }
-            existingVilla.VillaID = number.VillaID;
-            existingVilla.SpecialDetails = number.SpecialDetails;
+            
+            existingVilla.VillaID = villaNumber.VillaID;
+            existingVilla.SpecialDetails = villaNumber.SpecialDetails;
+
+            await villaDbContext.SaveChangesAsync();
 
             return existingVilla;
            

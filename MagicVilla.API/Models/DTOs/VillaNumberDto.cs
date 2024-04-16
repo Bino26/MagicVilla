@@ -8,8 +8,9 @@ namespace MagicVilla.API.Models.Domains
         [Required]
         public int VillaNo { get; set; }
         [Required]
-        public int VillaID { get; set; }
-        public string SpecialDetails { get; set; }
+        public Guid VillaID { get; set; }
         public VillaDto Villa { get; set; }
+        public string SpecialDetails { get; set; }
+        
     }
 }
