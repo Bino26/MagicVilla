@@ -24,10 +24,11 @@ namespace MagicVilla.API.Controllers
 
         [HttpGet]
         [Route("AllVilla")]
+        // GET: /api/villa?filterOn=Name&filterQuery=Track&isAscending=true
 
-        public async Task<IActionResult> GetAllVilla()
+        public async Task<IActionResult> GetAllVilla([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool?isAscending, [FromQuery]int pageNumber = 1, [FromQuery]int pageSize=100)
         {
-            var villas = await villaRepository.GetAllAsync();
+            var villas = await villaRepository.GetAllAsync(filterOn,filterQuery,sortBy,isAscending??true,pageNumber,pageSize);
             return Ok(mapper.Map<List<VillaDto>>(villas));
 
 

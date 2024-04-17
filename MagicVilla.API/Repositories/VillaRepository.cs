@@ -43,10 +43,35 @@ namespace MagicVilla.API.Repositories
             return villa;
         }
 
-        public async Task<List<Villa>> GetAllAsync()
+        public async Task<List<Villa>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
         {
-            var villas = await villaDbContext.Villas.ToListAsync();
-            return villas;
+            var villas = villaDbContext.Villas.AsQueryable();
+                
+
+            //filtering
+
+            if ((string.IsNullOrWhiteSpace(filterOn) == false && (string.IsNullOrWhiteSpace(filterQuery) == false))){
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    villas = villas.Where(x => x.Name.Contains(filterQuery));
+                }
+            }
+            // Sorting 
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    villas = isAscending ? villas.OrderBy(x => x.Name) : villas.OrderByDescending(x => x.Name);
+                }
+                else if (sortBy.Equals("Rate", StringComparison.OrdinalIgnoreCase))
+                {
+                    villas = isAscending ? villas.OrderBy(x => x.Rate) : villas.OrderByDescending(x => x.Rate);
+                }
+            }
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+
+            return await villas.Skip(skipResults).Take(pageSize).ToListAsync();
         }
 
         public async Task<Villa> GetByIdAsync(Guid id)
