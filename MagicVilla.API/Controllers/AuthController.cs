@@ -1,5 +1,6 @@
 ﻿using MagicVilla.API.Models.DTOs;
 using MagicVilla.API.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,11 @@ namespace MagicVilla.API.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly ITokenRepository tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
-            //this.signInManager = signInManager;
-            //this.tokenRepository = tokenRepository;
+            this.signInManager = signInManager;
+            this.tokenRepository = tokenRepository;
         }
 
         [HttpPost]
@@ -48,5 +49,70 @@ namespace MagicVilla.API.Controllers
             }
             return BadRequest("Something went wrong");
         }
+
+        [HttpPost]
+        [Route("login")]
+
+        public async Task<IActionResult> Login([FromBody]LoginRequestDto loginRequestDto)
+        {
+            var user = await userManager.FindByEmailAsync(loginRequestDto.Email);
+            if(user is not null)
+            {
+                var checkPaswordResult = await signInManager.PasswordSignInAsync(user, loginRequestDto.Password,isPersistent:false ,lockoutOnFailure: false);
+                if(checkPaswordResult.Succeeded)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
+                    var jwtToken = tokenRepository.CreateJwtToken(user, roles.ToList());
+                    var response = new LoginResponseDto
+                    {
+                        JwtToken = jwtToken
+                    };
+                    return  Ok(response);
+                }
+            }
+            return BadRequest("Username or Password is not correct");
+        }
+
+        [HttpGet]
+        [Route("getuser/{id}")]
+        [Authorize]
+
+        public async Task<IActionResult> GetUser([FromRoute] string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("User not found");
+        }
+
+        [HttpDelete]
+        [Route("deleteuser/{id}")]
+        [Authorize]
+
+        public async Task<IActionResult> DeleteUser([FromRoute] string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                await userManager.DeleteAsync(user);
+                return Ok("User has been deleted successfuly");
+
+
+            }
+
+            return BadRequest("User not found");
+        }
+        [HttpGet]
+        [Route("logout")]
+
+        public async Task<IActionResult> LogOut()
+        {
+             await signInManager.SignOutAsync();
+            return Ok("User was logged out successfuly");
+        }
+
     }
 }
