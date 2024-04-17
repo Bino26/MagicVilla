@@ -5,7 +5,7 @@ namespace MagicVilla.API.Data
 {
     public class VillaDbContext:DbContext
     {
-        public VillaDbContext(DbContextOptions dbContextOptions):base(dbContextOptions)
+        public VillaDbContext(DbContextOptions<VillaDbContext>dbContextOptions):base(dbContextOptions)
         {
             
         }
