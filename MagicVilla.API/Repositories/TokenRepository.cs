@@ -18,10 +18,18 @@ namespace MagicVilla.API.Repositories
         }
         public string CreateJwtToken(IdentityUser user, List<string> roles)
         {
-            //Create clains
+            ////Create clains
 
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            //var claims = new List<Claim>();
+            //claims.Add(new Claim(ClaimTypes.Email, user.Email));
+
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim("username", user.UserName),
+
+        };
 
             foreach (var role in roles)
             {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Security.Claims;
 
 namespace MagicVilla.API.Controllers
 {
@@ -74,38 +75,42 @@ namespace MagicVilla.API.Controllers
         }
 
         [HttpGet]
-        [Route("getuser/{id}")]
+        [Route("getuser")]
         [Authorize]
 
-        public async Task<IActionResult> GetUser([FromRoute] string id)
+        public async Task<IActionResult> GetUser()
         {
+            var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 return Ok(user);
             }
 
-            return BadRequest("User not found");
+            return Unauthorized("User not found");
         }
 
         [HttpDelete]
-        [Route("deleteuser/{id}")]
+        [Route("deleteuser")]
         [Authorize]
 
-        public async Task<IActionResult> DeleteUser([FromRoute] string id)
+        public async Task<IActionResult> DeleteUser()
         {
+            var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
                 await userManager.DeleteAsync(user);
                 return Ok("User has been deleted successfuly");
-
-
             }
 
-            return BadRequest("User not found");
+            return Unauthorized("User not found");
+
+
+
         }
         [HttpGet]
+        [Authorize]
         [Route("logout")]
 
         public async Task<IActionResult> LogOut()

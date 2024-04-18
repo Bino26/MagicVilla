@@ -5,6 +5,7 @@ using MagicVilla.API.Repositories.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -29,21 +30,33 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
-builder.Services.AddIdentityCore<IdentityUser>()
-    .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("MagicVilla")
-    .AddEntityFrameworkStores<VillaAuthDbContext>()
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<VillaAuthDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("MagicVilla") 
     .AddDefaultTokenProviders();
 
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = 6;
-    options.Password.RequiredUniqueChars = 1;
+    options.Password = new PasswordOptions
+    {
+        RequireDigit = false,
+        RequireLowercase = false,
+        RequireNonAlphanumeric = false,
+        RequireUppercase = false,
+        RequiredLength = 6,
+        RequiredUniqueChars = 1
+
+    };
+    options.SignIn = new SignInOptions
+    {
+        RequireConfirmedAccount = false,
+        RequireConfirmedEmail = false
+    };
+    options.User = new UserOptions
+    {
+        AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.@1234567890!#$%&'*+-/=?^_`{|}~",
+        RequireUniqueEmail = true
+    };
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
