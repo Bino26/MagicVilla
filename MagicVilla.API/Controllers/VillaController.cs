@@ -3,6 +3,7 @@ using MagicVilla.API.CustomActionFilters;
 using MagicVilla.API.Models.Domains;
 using MagicVilla.API.Models.DTOs;
 using MagicVilla.API.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ namespace MagicVilla.API.Controllers
 
         [HttpGet]
         [Route("AllVilla")]
+        [Authorize(Roles ="Writer,Reader")]
         // GET: /api/villa?filterOn=Name&filterQuery=Track&isAscending=true
 
         public async Task<IActionResult> GetAllVilla([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool?isAscending, [FromQuery]int pageNumber = 1, [FromQuery]int pageSize=100)
@@ -35,6 +37,7 @@ namespace MagicVilla.API.Controllers
         }
         [HttpGet]
         [Route("{id}")]
+        [Authorize(Roles ="Writer,Reader")]
 
         public async Task<IActionResult> GetVillaById([FromRoute]Guid id)
         {
@@ -48,6 +51,7 @@ namespace MagicVilla.API.Controllers
         [HttpPost]
         [Route("createvilla")]
         [ValidateModel]
+        [Authorize(Roles ="Writer")]
 
         public async Task<IActionResult> CreateVilla([FromBody] CreateVillaDto createVillaDto)
         {
@@ -58,7 +62,8 @@ namespace MagicVilla.API.Controllers
         [HttpPut]
         [Route("{id}")]
         [ValidateModel]
-        
+        [Authorize(Roles ="Writer")]
+
 
         public async Task<IActionResult> UpdateVilla([FromRoute ]Guid id , [FromBody]UpdateVillaDto updateVillaDto)
         {
@@ -69,6 +74,7 @@ namespace MagicVilla.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles ="Writer")]
 
         public async Task<IActionResult> DeleteVilla([FromRoute]Guid id)
         {
@@ -81,6 +87,7 @@ namespace MagicVilla.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles ="Writer")]
 
         public async Task<IActionResult> DeleteAllVilla()
         {

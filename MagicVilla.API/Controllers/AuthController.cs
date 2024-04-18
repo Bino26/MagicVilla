@@ -89,6 +89,33 @@ namespace MagicVilla.API.Controllers
 
             return Unauthorized("User not found");
         }
+        [HttpPut]
+        [Route("updateuser")]
+
+        public async Task<IActionResult> UpdateUser([FromBody]UpdateUserDto updateUserDto)
+        {
+            
+            {
+                var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var user = await userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }                
+                user.UserName = updateUserDto.Username;
+                
+                var result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok("User updated successfully");
+                }
+                else
+                {
+                    
+                    return StatusCode(500, "Failed to update user");
+                }
+            }
+        }
 
         [HttpDelete]
         [Route("deleteuser")]
